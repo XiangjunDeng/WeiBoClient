@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<configuration>
+  <appSettings>
+    <AppKey>1244447634</AppKey>
+    <AppSecret>ea5c488941f3471aa8707ad549b5b961</AppSecret>
+    <RedirectUri>https://api.weibo.com/oauth2/default.html</RedirectUri>
+  </appSettings>
+</configuration>
