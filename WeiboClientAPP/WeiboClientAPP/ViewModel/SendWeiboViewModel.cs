@@ -13,7 +13,6 @@ using System.IO;
 
 namespace WeiBoClient.ViewModel
 {
-
     public class SendWeiboViewModel : BaseViewModel
     {
         private string sendContent;
@@ -38,40 +37,54 @@ namespace WeiBoClient.ViewModel
             {
                 return sendPic;
             }
-                
+
             set
             {
                 sendPic = value;
                 NotifyPropertyChanged("SendPic");
             }
         }
-                
+
+        private string sendPicPath;
+        public string SendPicPath
+        {
+            get
+            {
+                return sendPicPath;
+            }
+
+            set
+            {
+                sendPicPath = value;
+                NotifyPropertyChanged("SendPicPath");
+            }
+        }
+
         private ObservableCollection<WeiBoItemTestModel> weibo;
         public ObservableCollection<WeiBoItemTestModel> ListItems
-                { 
+        {
             get
-                    { 
+            {
                 return weibo;
-                    }
+            }
             set
             {
                 this.weibo = value;
                 NotifyPropertyChanged("ListItems");
-                    }
-                }
+            }
+        }
 
         public ICommand PostMsgWithoutPic
         {
             get
             {
-                
+
                 return new DelegateCommand<string>
                 (
 
                     (p) =>
                     {
                         string result = string.Empty;
-                        //string weiboContent = "test weibo content";
                         Task.WaitAll(Task.Run(async delegate { result = await PostMSgnopic(SendContent); }));
 
                     },
@@ -80,8 +93,8 @@ namespace WeiBoClient.ViewModel
                         return true;
                     }
                 );
-  
-                }
+
+            }
         }
 
         #region private postmsgwithoutpic method
@@ -117,7 +130,6 @@ namespace WeiBoClient.ViewModel
                     (p) =>
                     {
                         string result = string.Empty;
-                        //string weibocontent = string.Empty;
                         Task.WaitAll(Task.Run(async delegate { result = await Postmsgpic(SendContent, SendPic); }));
                     },
                     (p) =>
@@ -134,8 +146,8 @@ namespace WeiBoClient.ViewModel
             ISdkCmdBase cmdBase = new CmdPostMsgWithPic()
             {
                 Status = content,
-                PicPath = contentPic.UriSource.LocalPath
-                
+                PicPath = SendPicPath
+
             };
             var result = await engine.RequestCmd(SdkRequestType.POST_MESSAGE_PIC, cmdBase);
             if (result.errCode == SdkErrCode.SUCCESS)
@@ -156,7 +168,7 @@ namespace WeiBoClient.ViewModel
             {
                 string reslut = string.Empty;
                 Task.WaitAll(Task.Run(async delegate { reslut = await AtUser(); }));
-                
+
                 return new DelegateCommand<string>
                 (
                     (p) =>
@@ -181,7 +193,7 @@ namespace WeiBoClient.ViewModel
                 Type = "0",
                 Keyword = "q",
                 Range = "2"
-                
+
             };
             var result = await engine.RequestCmd(SdkRequestType.AT_USERS, cmdBase);
             if (result.errCode == SdkErrCode.SUCCESS)
@@ -199,53 +211,43 @@ namespace WeiBoClient.ViewModel
         {
             get
             {
-                   
+
                 return new DelegateCommand<string>
-               (
-async (p) =>
-                   {
+                               (
+                                   async (p) =>
+                                   {
                                        var picker = new FileOpenPicker();
                                        picker.SuggestedStartLocation = PickerLocationId.Desktop;
                                        picker.FileTypeFilter.Add(".jpg");
                                        picker.FileTypeFilter.Add(".jpeg");
                                        picker.FileTypeFilter.Add(".png");
                                        StorageFile file = await picker.PickSingleFileAsync();
-                                       Windows.Storage.Streams.IRandomAccessStream fileStream =
-                    await file.OpenAsync(Windows.Storage.FileAccessMode.Read);
+                                       var dataBuffer = await Windows.Storage.FileIO.ReadBufferAsync(file);
+                                       if (file != null)
+                                       {
+                                           StorageFolder picFolder = ApplicationData.Current.LocalFolder;
+                                           // write buffer to storage.
+                                           StorageFile object_file = await picFolder.CreateFileAsync(file.Name, CreationCollisionOption.OpenIfExists);
 
+                                           await Windows.Storage.FileIO.WriteBufferAsync(object_file, dataBuffer);
+                                           SendPicPath = object_file.Path;
 
-                                       BitmapImage image = new BitmapImage(new Uri(file.Path, UriKind.Absolute));
-                                      image.SetSource(fileStream);
-                                       SendPic = image;
-                                       //FileOpenPicker a = new FileOpenPicker();
-                                       //IReadOnlyList<StorageFile> testFile = null;
-                                       //Task.WaitAll(Task.Run(async delegate { testFile = await a.PickMultipleFilesAsync(); }));
-                   },
-                   (p) =>
-                   {
-                       return true;
-                   }
-               );
+                                           Windows.Storage.Streams.IRandomAccessStream fileStream =
+                                                             await file.OpenAsync(Windows.Storage.FileAccessMode.Read);
 
+                                           BitmapImage image = new BitmapImage(new Uri(file.Path, UriKind.Absolute));
+                                           image.SetSource(fileStream);
+                                           SendPic = image;
+                                       }
+                                   },
+                                   (p) =>
+                                   {
+                                       return true;
+                                   }
+                               );
             }
-                
+
         }
-
-        //private async Task<IReadOnlyList<StorageFile>> Getpicture()
-        //{
-            
-        //    //var picker = new FileOpenPicker();
-        //    //picker.SuggestedStartLocation = PickerLocationId.ComputerFolder;
-
-        //    FileOpenPicker a = new FileOpenPicker();
-        //    IReadOnlyList<StorageFile> testFile = null;
-        //    Task.WaitAll(Task.Run(async delegate { testFile = await a.PickMultipleFilesAsync(); }));
-           
-
-        //    return testFile; 
-          
-            
-        //}
     }
 }
 
