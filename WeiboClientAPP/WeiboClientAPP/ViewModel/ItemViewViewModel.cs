@@ -428,5 +428,10 @@ namespace WeiBoClient.ViewModel
 				NotifyPropertyChanged("WeiBoDetail");
 			}
 		}
+
+        private async Task GetItemAsync()
+        {
+
+        }
     }
 }

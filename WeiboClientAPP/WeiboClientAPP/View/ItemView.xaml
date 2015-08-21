@@ -65,14 +65,15 @@
         <TextBlock Text="TimeLine" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI" FontSize="65" />
         <ScrollViewer Grid.Row="2">
             <StackPanel x:Name="MainContent" Height="588">
-                <ListView ItemsSource="{Binding Path=ListItems}" Foreground="White" Width="Auto" SelectedItem="{Binding Path=WeiBoItem, Mode=TwoWay}">
-                    <Interactivity:Interaction.Behaviors>
-                        <Core:EventTriggerBehavior EventName="Tapped">
+                <GridView x:Name="itemGridView" SelectionMode="None" IsItemClickEnabled="True" ItemsSource="{Binding Path=ListItems}" Foreground="White" Width="Auto" ItemClick="ListView_SeletedItemClick">
+                    <!--<Interactivity:Interaction.Behaviors>
+                        <Core:EventTriggerBehavior EventName="ItemClick">
                             <Core:NavigateToPageAction TargetPage="WeiboClient.View.WeiBoDetail"/>
-                            <Core:InvokeCommandAction Command="{Binding Path=ItemDetailCommand}" />
+                            --><!--<Core:InvokeCommandAction Command="{Binding Path=ItemDetailCommand}" />--><!--
+                            
                         </Core:EventTriggerBehavior>
-                    </Interactivity:Interaction.Behaviors>
-                    <ListView.ItemTemplate>
+                    </Interactivity:Interaction.Behaviors>-->
+                    <GridView.ItemTemplate>
                         <DataTemplate>
                             <Grid Width="Auto" Height="Auto">
                                 <Grid.RowDefinitions>
@@ -104,9 +105,9 @@
                                 </StackPanel>
                             </Grid>
                         </DataTemplate>
-                    </ListView.ItemTemplate>
+                    </GridView.ItemTemplate>
 
-                </ListView>
+                </GridView>
                 <!--<View:WeiBoItem />-->
                 <Button x:Name="btnLogin" Foreground="Black" BorderBrush="Black" Content="Login" Grid.Column="1"
                 HorizontalAlignment="Left" Margin="9,7,0,0" Grid.Row="3" VerticalAlignment="Top"

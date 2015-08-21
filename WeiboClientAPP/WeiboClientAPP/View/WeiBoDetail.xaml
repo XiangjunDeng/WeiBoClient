@@ -5,12 +5,12 @@
     xmlns:local="using:WeiboClient.View"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:viewmodel ="using:WeiBoClient.ViewModel"
+    xmlns:viewmodel ="using:WeiboClient.ViewModel"
     xmlns:Interactivity="using:Microsoft.Xaml.Interactivity" xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
     mc:Ignorable="d">
 
     <Page.DataContext>
-        <viewmodel:ItemViewViewModel x:Name="vm"/>
+        <viewmodel:WeiBoDetailViewModel x:Name="vm"/>
     </Page.DataContext>
     <Page.BottomAppBar>
         <CommandBar>
@@ -40,23 +40,23 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0" Orientation="Horizontal">
-                <Image Width="Auto" Height="Auto" Source="{Binding Path=User.ProfileImageUrl}"/>
-                <TextBlock Width="Auto" />
+                <Image Width="Auto" Height="Auto" Source="{Binding Path=Image}"/>
+                <TextBlock Width="Auto" Height="Auto" Text="{Binding Path=NickName}" FontSize="35" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </StackPanel>
-            <TextBlock Grid.Row="1" Width="Auto" Height="Auto" />
+            <TextBlock Grid.Row="1" Width="Auto" Height="Auto" Text="{Binding Path=Text}" FontSize="25" HorizontalAlignment="Left" VerticalAlignment="Center"/>
             <Grid Grid.Row="2">
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <TextBlock Width="auto" Height="auto" Foreground="White" FontSize="23" Grid.Row="0"/>
+                <TextBlock Width="auto" Height="auto" Foreground="White" FontSize="23" Grid.Row="0" Text="{Binding Path=RepostName}"/>
                 <StackPanel Grid.Row="1" Height="auto" Width="auto" Orientation="Horizontal">
-                    <TextBlock Width="auto" Height="auto" Foreground="White" FontSize="13" Grid.Row="0" />
+                    <TextBlock Width="auto" Height="auto" Foreground="White" FontSize="13" Grid.Row="0" Text="{Binding Path=RepostText}"/>
                     <TextBlock Width="auto" Height="auto" Foreground="White" FontSize="13" Grid.Row="0" />
                 </StackPanel>
             </Grid>
         </Grid>
         <!--</StackPanel>-->
-        <Button Width="0" Height="0" Command="{Binding Path=ItemDetailCommand}" />
+        <!--<Button Width="0" Height="0" Command="{Binding Path=ItemDetailCommand}" />-->
     </Grid>
 </Page>
